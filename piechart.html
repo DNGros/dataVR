@@ -91,7 +91,7 @@
 <script src="build/webvr-manager.js"></script>
 
 <!--our stuff-->
-<script src="custom_src/bargraph.js"></script>
+<script src="custom_src/piechart.js"></script>
     
 <script>
     //dataVR vars
@@ -117,30 +117,7 @@
 
     // Apply VR stereo rendering to renderer.
     var effect = new THREE.VREffect(renderer);
-    effect.setSize(window.innerWidth, window.innerHeight);
-
-
-    // Add a repeating grid as a skybox.
-    /*var boxWidth = 5;
-    var loader = new THREE.TextureLoader();
-    loader.load('img/box.png', onTextureLoaded);
-
-    function onTextureLoaded(texture) {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(boxWidth, boxWidth);
-
-      var geometry = new THREE.BoxGeometry(boxWidth, boxWidth, boxWidth);
-      var material = new THREE.MeshBasicMaterial({
-        map: texture,
-        color: 0x01BE00,
-        side: THREE.BackSide
-      });
-
-      var skybox = new THREE.Mesh(geometry, material);
-      scene.add(skybox);
-    }*/
-
+    effect.setSize(window.innerWidth, window.innerHeight);  
 
     // Create a VR manager helper to enter and exit VR mode.
     var params = {
@@ -153,41 +130,23 @@
     //var material = new THREE.MeshNormalMaterial();
     var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
     
-    // Make a cylinder....
-    var geometry1 = new THREE.CylinderGeometry(2,2,1,20,32,false,0,Math.PI);
-    var cylinder = new THREE.Mesh(geometry1, material);
-    cylinder.position.z = -10;
-    cylinder.position.x = 0;
-    cylinder.position.y = -3
-    scene.add(cylinder);
-
-    //Add cubes for x
-    /*var testGraph = new BarGraph(scene, {});
-    
-    var bars = [];
-    for(var i = 0; i < data.x.length; i++){
-       var geometry2 = new THREE.BoxGeometry(0.5, data.y[i], 0.5);
-       var cube = new THREE.Mesh(geometry2, material);
-       cube.position.z = -5;
-       cube.position.x = data.x[i] - data.x.length/2;
-       bars.push(cube);
-       scene.add(cube);
-    }*/
-    
+    // Bake the pie
+    var colors = [ 0x9966ff, 0xff3300, 0x00ffff ];
+    var data = { 'meep1': 5, 'meep2': 5, 'meep3': 2 };
+    var pie = new PieChart(data, colors, 0.5, 2);
+    pie.position.z = -10;
+    pie.position.y = -1;
+    scene.add(pie);
+   
     // Request animation frame loop function
     function animate(timestamp) {
-      // Apply rotation to bar meshes
-      /*for(var i = 0; i < bars.length; i++){
-        bars[i].rotation.y += 0.01;
-      }*/
-
       // Update VR headset position and apply to camera.
       controls.update();
 
       // Render the scene through the manager.
-        manager.render(scene, camera, timestamp);
+      manager.render(scene, camera, timestamp);
 
-        requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
     }
 
     // create a point light
