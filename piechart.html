@@ -97,11 +97,11 @@
     //dataVR vars
     data = {x:[0,1,2], y:[5,2,4]}
     
-    
     // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
     // Only enable it if you actually need to.
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize( window.innerWidth, window.innerHeight );
 
     // Append the canvas element created by the renderer to document body element.
     document.body.appendChild(renderer.domElement);
@@ -118,6 +118,15 @@
     // Apply VR stereo rendering to renderer.
     var effect = new THREE.VREffect(renderer);
     effect.setSize(window.innerWidth, window.innerHeight);  
+
+    // Make the pie change color when aimed at
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    function onMouseMove ( event ) {
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    }
+    window.addEventListener( 'mousemove', onMouseMove, false );
 
     // Create a VR manager helper to enter and exit VR mode.
     var params = {
@@ -145,8 +154,41 @@
 
       // Render the scene through the manager.
       manager.render(scene, camera, timestamp);
+      render();
 
       requestAnimationFrame(animate);
+    }
+
+    var currentPainting;
+    var oldColor;
+    function render() {
+        // update the picking ray with the camera and mouse positioni
+	var center = new THREE.Vector2(0,0);
+        raycaster.setFromCamera( center, camera );       
+
+        
+	
+	// calculate objects intersecting the picking ray
+        var intersects = raycaster.intersectObjects( scene.children, true );
+	if (intersects.length >0 && currentPainting !== intersects[0].object) {     
+	     if (currentPainting !== undefined) {
+		 console.log(oldColor);	
+		 currentPainting.material.color.set(oldColor);
+	     }
+	     currentPainting = intersects[0].object;
+	     console.log('conditional entered');
+	     oldColor = currentPainting.material.color.clone();  
+             currentPainting.material.color.set( 0xff0000 );
+	} else if (intersects.length === 0 && currentPainting !== undefined) {
+	      currentPainting.material.color.set(oldColor);
+	     currentPainting = undefined;
+	}
+	/* for ( var i = 0; i < intersects.length; i++ ) {
+             intersects[ i ].object.material.color.set( 0xff0000 );
+             console.log('touched obj');        
+        }*/
+	
+	renderer.render(scene, camera);
     }
 
     // create a point light
