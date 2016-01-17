@@ -7,10 +7,8 @@ function PieChart(hist, colors, height, radius) {
 
   var totalCount = 0.0;
   for (var category in hist) {
-      console.log("add count " + category + " val " + hist[category]);
     totalCount += Number(hist[category]);
   }
-    console.log("tot count " + totalCount);
   var startDegree = 0;
 
   Object.keys(hist).forEach(function(category, index) {

@@ -160,7 +160,7 @@
 
     // Create 3D objects.
     var chartTypes = JSON.parse(sessionStorage.chartTypes);
-    
+    var colors = [ 0x9966ff, 0xCC3300, 0x00ffff , 0x00CC33, 0xC36A41, 0x03B3F3, 0xA543B3];
     var newChart;
     switch(chartTypes[0]){
         case "scatter":
@@ -173,8 +173,6 @@
             break;
         case "pie":
             var pieData = JSON.parse(sessionStorage.pieData);
-            var colors = [ 0x9966ff, 0xCC3300, 0x00ffff , 0x00CC33, 0xC36A41, 0x03B3F3, 0xA543B3];
-            var data = { 'meep1': 5, 'meep2': 5, 'meep3': 2 };
             newChart = new PieChart(pieData, colors, 1, 8);
             newChart.position.z = -7;
             newChart.position.y = -1;
@@ -182,6 +180,10 @@
             newChart.rotation.x = .2;
             break;
         case "bar":
+            var barData = JSON.parse(sessionStorage.barData);
+            newChart = new BarChart(barData, colors, 4, 1);
+            newChart.position.z = -3;
+            newChart.position.y = -2;
             break;
             
     }

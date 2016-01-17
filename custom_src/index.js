@@ -59,6 +59,15 @@ $('#VisualizeBtn').click(function(){
             //Store it for next page
             sessionStorage.pieData = JSON.stringify(pieData);
             break;
+        case '#bar':
+            chartTypes.push("bar");
+            var barData = {};
+            parseResults.data.forEach(function(row, index){
+                barData[row.category]  = row.value;
+            });
+            //Store it for next page
+            sessionStorage.barData = JSON.stringify(barData);
+            break;
     }
     //record of kinds of charts
     sessionStorage.chartTypes = JSON.stringify(chartTypes);
