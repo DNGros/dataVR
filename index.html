@@ -9,6 +9,7 @@
 
     <!-- Bootstrap -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Not bootstrap -->
     <link href="css/main.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,8 +24,8 @@
             <h1>Welcome to DataVR</h1>
             <p>A powerful tool for visualizing your data in virtual reality</p> 
         </div>
-        Stary by just uploading a file
-        <input type="file" id="upCSV">
+        Start by just uploading a file
+        <input type="file" id="upCSV" accept=".csv">
         <div class="col-md-16 text-center"> 
             <button type="button" id="VisualizeBtn" class="btn btn-success col-centered">Visualize!</button>
         </div>
@@ -34,6 +35,13 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/papaparse/papaparse.min.js"></script>
+    
+    <script src="bower_components/threejs/build/three.js"></script>
+    <script src="custom_src/barchart.js"></script>
+    <script src="custom_src/ScatterGraph.js"></script>   
+    <script src="custom_src/util.js"></script> 
+    
     <script src="custom_src/index.js"></script>
+      
   </body>
 </html>

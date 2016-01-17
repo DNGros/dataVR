@@ -152,45 +152,18 @@
 
     // Create 3D objects.
     //var material = new THREE.MeshNormalMaterial();
-    var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
+    var x,y,z,s;
+    x = JSON.parse(sessionStorage.xD);
+    y= JSON.parse(sessionStorage.yD);
+    z = JSON.parse(sessionStorage.zD);
+    s = JSON.parse(sessionStorage.sD);
+    console.log(x);
+    var newChart = new ScatterGraph(x,y,z,s);
+    scene.add(newChart);    
     
-    //Add cubes for x
-    //var testGraph = new BarGraph({yPos: 32});
-    
-    //randomly populate data
-    var x = [], y = [],z = [], s =[];
-    for(var i = 0; i < 50; i++){
-        x.push(Math.random() * 3 + 1);
-        if(Math.random() > .5)
-            x[i] = -x[i];
-        y.push(Math.random() * 3 + 1);
-        if(Math.random() > .5)
-            y[i] = -y[i];
-        z.push(Math.random() * 5 + 1);
-        if(Math.random() > .5)
-            z[i] = -z[i];
-        s.push(.25);
-        
-    }
-    
-    var testScat = new ScatterGraph({xData:x, yData:y, zData:z, sData:s});
-    /*var bars = [];
-    for(var i = 0; i < data.x.length; i++){
-       var geometry = new THREE.BoxGeometry(0.5, data.y[i], 0.5);
-       var cube = new THREE.Mesh(geometry, material);
-       cube.position.z = -5;
-       cube.position.x = data.x[i] - 3;
-       bars.push(cube);
-       scene.add(cube);
-    }*/
     
     // Request animation frame loop function
     function animate(timestamp) {
-      // Apply rotation to bar meshes
-      /*for(var i = 0; i < bars.length; i++){
-        bars[i].rotation.y += 0.01;
-      }*/
-
       // Update VR headset position and apply to camera.
       controls.update();
 
