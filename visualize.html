@@ -118,9 +118,9 @@
     
     // Create a three.js camera.
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-;
     scene.add(cursor);
-
+    camera.position.y = 1.7; //standing height
+    
     // Apply VR headset positional data to camera.
     var controls = new THREE.VRControls(camera);
 
@@ -175,7 +175,7 @@
             var pieData = JSON.parse(sessionStorage.pieData);
             newChart = new PieChart(pieData, colors, 1, 8);
             newChart.position.z = -7;
-            newChart.position.y = -1;
+            newChart.position.y = 1;
             newChart.rotation.y = 70;
             newChart.rotation.x = .2;
             break;
@@ -183,7 +183,6 @@
             var barData = JSON.parse(sessionStorage.barData);
             newChart = new BarChart(barData, colors, 4, 1);
             newChart.position.z = -3;
-            newChart.position.y = -2;
             break;
             
     }
@@ -191,10 +190,17 @@
     
     var currentPainting;
     var oldColor; 
+    
+    function getCameraDir(){
+        var cameraCoords = new THREE.Vector3(0,0,-1000);
+        var worldCoords = cameraCoords.applyMatrix4(camera.matrixWorld);
+        return worldCoords.sub(camera.position).normalize();
+    }
+    
     function checkGaze() {
-	var center = new THREE.Vector2(0,0);
-        raycaster.setFromCamera( center, camera );           
-        
+	   var center = new THREE.Vector2(0,0);
+        //raycaster.setFromCamera(center , camera );           
+        raycaster.set(camera.position, getCameraDir());
         // calculate objects intersecting the picking ray
         var intersects = raycaster.intersectObjects( newChart.children, true );
         if (intersects.length >0 && currentPainting !== intersects[0].object) {     
@@ -217,14 +223,12 @@
     
     
     function updateCursor() {
-	    var cameraCoords = new THREE.Vector3(0,0,-1000);
-        var worldCoords = cameraCoords.applyMatrix4(camera.matrixWorld);
-        var dir = worldCoords.sub(camera.position).normalize();
+        var dir = getCameraDir()
         var ray = new THREE.Ray(camera.position, dir);
         var cursorPos = ray.at(1.0); 
-        cursor.position.z = dir.z * cursorDistance;
-        cursor.position.y = dir.y * cursorDistance;
-        cursor.position.x = dir.x * cursorDistance;
+        cursor.position.z = camera.position.z + dir.z * cursorDistance;
+        cursor.position.y =  camera.position.y + dir.y * cursorDistance;
+        cursor.position.x =camera.position.x +  dir.x * cursorDistance;
     }
  
     // Request animation frame loop function
