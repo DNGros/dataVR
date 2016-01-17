@@ -106,7 +106,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     var raycaster = new THREE.Raycaster();
     var cursor = new THREE.Mesh(new THREE.SphereGeometry(0.03,32,32),
-	new THREE.MeshLambertMaterial( { color: 0xffffff } ))
+	new THREE.MeshBasicMaterial( { color: 0xffffff } ))
 
     // Append the canvas element created by the renderer to document body element.
     document.body.appendChild(renderer.domElement);
