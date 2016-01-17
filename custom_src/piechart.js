@@ -15,10 +15,6 @@ function PieChart(hist, colors, height, radius) {
     var sliceSize = Math.PI * 2 * Number(hist[category]) / totalCount;
     var sliceGeometry = new THREE.CylinderGeometry(radius, radius, height, 20, 
 	32, false, startDegree, sliceSize);
-<<<<<<< HEAD
-=======
-    //console.log(sliceGeometry.name);
->>>>>>> 21f1a7a66a8602cc3ffed47b3001687d43add687
     var sliceMaterial = new THREE.MeshLambertMaterial({ color: colors[index] });
     var slice = new THREE.Mesh(sliceGeometry, sliceMaterial);
     pie.add(slice);

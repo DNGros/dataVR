@@ -97,7 +97,7 @@
 <script src="custom_src/piechart.js"></script>
     
 <script> 
-    var cursorDistanceDefault = 2.0;
+    var cursorDistanceDefault = 1.0;
     var cursorDistance = cursorDistanceDefault;
     
     // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
@@ -173,7 +173,7 @@
             break;
         case "pie":
             var pieData = JSON.parse(sessionStorage.pieData);
-            newChart = new PieChart(pieData, colors, 1, 8);
+            newChart = new PieChart(pieData, colors, 1, 6);
             newChart.position.z = -7;
             newChart.position.y = 1;
             newChart.rotation.y = 70;
