@@ -102,6 +102,8 @@
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     var raycaster = new THREE.Raycaster();
+    var cursor = new THREE.Mesh(new THREE.SphereGeometry(0.01,32,32),
+	new THREE.MeshLambertMaterial( { color: 0xffffff } ))
 
     // Append the canvas element created by the renderer to document body element.
     document.body.appendChild(renderer.domElement);
@@ -113,6 +115,8 @@
     
     // Create a three.js camera.
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+;
+    scene.add(cursor);
 
     // Apply VR headset positional data to camera.
     var controls = new THREE.VRControls(camera);
@@ -185,16 +189,27 @@
         }
 	renderer.render(scene, camera);	
     }
-    
+
+    function updateCursor() {
+	var cameraCoords = new THREE.Vector3(0,0,-1);
+        var worldCoords = cameraCoords.applyMatrix4(camera.matrixWorld);
+        var dir = worldCoords.sub(camera.position).normalize();
+        var ray = new THREE.Ray(camera.position, dir);
+        var cursorPos = ray.at(1.0); 
+        cursor.position.z = dir.z;
+        cursor.position.y = dir.y;
+        cursor.position.x = dir.x;
+  }
+ 
     // Request animation frame loop function
     function animate(timestamp) {
       // Update VR headset position and apply to camera.
       controls.update();
-
+      cursor.x = 1000; 
       checkGaze();
       // Render the scene through the manager.
       manager.render(scene, camera, timestamp);
-
+      updateCursor();
       requestAnimationFrame(animate);
     }
 
@@ -219,9 +234,9 @@
         controls.resetSensor();
       }
     }
-
+    
     window.addEventListener('keydown', onKey, true);
-
+  
 </script>
 
 </html>
