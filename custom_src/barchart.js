@@ -2,7 +2,6 @@
 // colors   an array of colors to color the bars
 // height   the height to scale the bars wrt to
 // barSize  the side length of the base of each bar
-// color    the color of the bars
 function BarChart(hist, colors, height, barSize) {
   chart = new THREE.Object3D();
 
