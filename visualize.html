@@ -214,7 +214,7 @@
     }
 
     // create a point light
-    var pointLight =
+    /*var pointLight =
     new THREE.PointLight(0xFFFFFF);
 
     // set its position
@@ -223,8 +223,10 @@
     pointLight.position.z = 130;
 
     // add to the scene
-    scene.add(pointLight);
+    scene.add(pointLight);*/
     
+    var hemLight = new THREE.HemisphereLight( 0xffffbb, 0x0B0B20, 1 );
+    scene.add(hemLight);
     // Kick off animation loop
     animate();
 
