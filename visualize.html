@@ -94,15 +94,18 @@
 <script src="custom_src/barchart.js"></script>
 <script src="custom_src/ScatterGraph.js"></script>   
 <script src="custom_src/util.js"></script>  
-
+<script src="custom_src/piechart.js"></script>
     
 <script> 
+    var cursorDistanceDefault = 2.0;
+    var cursorDistance = cursorDistanceDefault;
+    
     // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
     // Only enable it if you actually need to.
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     var raycaster = new THREE.Raycaster();
-    var cursor = new THREE.Mesh(new THREE.SphereGeometry(0.01,32,32),
+    var cursor = new THREE.Mesh(new THREE.SphereGeometry(0.03,32,32),
 	new THREE.MeshLambertMaterial( { color: 0xffffff } ))
 
     // Append the canvas element created by the renderer to document body element.
@@ -115,9 +118,9 @@
     
     // Create a three.js camera.
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-;
     scene.add(cursor);
-
+    camera.position.y = 1.7; //standing height
+    
     // Apply VR headset positional data to camera.
     var controls = new THREE.VRControls(camera);
 
@@ -156,50 +159,77 @@
     var manager = new WebVRManager(renderer, effect, params);
 
     // Create 3D objects.
-    //var material = new THREE.MeshNormalMaterial();
-    var x,y,z,s;
-    x = JSON.parse(sessionStorage.xD);
-    y= JSON.parse(sessionStorage.yD);
-    z = JSON.parse(sessionStorage.zD);
-    s = JSON.parse(sessionStorage.sD);
-    console.log(x);
-    var newChart = new ScatterGraph(x,y,z,s);
-    scene.add(newChart);    
-   
+    var chartTypes = JSON.parse(sessionStorage.chartTypes);
+    var colors = [ 0x9966ff, 0xCC3300, 0x00ffff , 0x00CC33, 0xC36A41, 0x03B3F3, 0xA543B3];
+    var newChart;
+    switch(chartTypes[0]){
+        case "scatter":
+            var x,y,z,s;
+            x = JSON.parse(sessionStorage.xD);
+            y= JSON.parse(sessionStorage.yD);
+            z = JSON.parse(sessionStorage.zD);
+            s = JSON.parse(sessionStorage.sD);
+            newChart = new ScatterGraph(x,y,z,s);
+            break;
+        case "pie":
+            var pieData = JSON.parse(sessionStorage.pieData);
+            newChart = new PieChart(pieData, colors, 1, 8);
+            newChart.position.z = -7;
+            newChart.position.y = 1;
+            newChart.rotation.y = 70;
+            newChart.rotation.x = .2;
+            break;
+        case "bar":
+            var barData = JSON.parse(sessionStorage.barData);
+            newChart = new BarChart(barData, colors, 4, 1);
+            newChart.position.z = -3;
+            break;
+            
+    }
+    scene.add(newChart);
+    
     var currentPainting;
     var oldColor; 
+    
+    function getCameraDir(){
+        var cameraCoords = new THREE.Vector3(0,0,-1000);
+        var worldCoords = cameraCoords.applyMatrix4(camera.matrixWorld);
+        return worldCoords.sub(camera.position).normalize();
+    }
+    
     function checkGaze() {
-	var center = new THREE.Vector2(0,0);
-        raycaster.setFromCamera( center, camera );           
-        
+	   var center = new THREE.Vector2(0,0);
+        //raycaster.setFromCamera(center , camera );           
+        raycaster.set(camera.position, getCameraDir());
         // calculate objects intersecting the picking ray
-        var intersects = raycaster.intersectObjects( scene.children, true );
+        var intersects = raycaster.intersectObjects( newChart.children, true );
         if (intersects.length >0 && currentPainting !== intersects[0].object) {     
              if (currentPainting !== undefined) {
                  console.log(oldColor); 
                  currentPainting.material.color.set(oldColor);
              }
              currentPainting = intersects[0].object;
-             console.log('conditional entered');
-             oldColor = currentPainting.material.color.clone();  
+             oldColor = currentPainting.material.color.clone(); 
+            console.log('set curs pos z ' + intersects[0].distance);
+             cursorDistance = intersects[0].distance-.6;
              currentPainting.material.color.set( 0xff0000 );
         } else if (intersects.length === 0 && currentPainting !== undefined) {
               currentPainting.material.color.set(oldColor);
              currentPainting = undefined;
+            cursorDistance = cursorDistanceDefault;
         }
-	renderer.render(scene, camera);	
+	   renderer.render(scene, camera);	
     }
-
+    
+    
     function updateCursor() {
-	var cameraCoords = new THREE.Vector3(0,0,-1);
-        var worldCoords = cameraCoords.applyMatrix4(camera.matrixWorld);
-        var dir = worldCoords.sub(camera.position).normalize();
+        var dir = getCameraDir()
         var ray = new THREE.Ray(camera.position, dir);
         var cursorPos = ray.at(1.0); 
-        cursor.position.z = dir.z;
-        cursor.position.y = dir.y;
-        cursor.position.x = dir.x;
-  }
+        cursor.position.z = camera.position.z + dir.z * cursorDistance;
+        cursor.position.y =  camera.position.y + dir.y * cursorDistance;
+        cursor.position.x =camera.position.x +  dir.x * cursorDistance;
+    }
  
     // Request animation frame loop function
     function animate(timestamp) {

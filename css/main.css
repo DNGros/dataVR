@@ -3,7 +3,14 @@
     margin: 0 auto;
     
 }
-
 #VisualizeBtn{
+    margin-top: 10px;
+}
+.uploadComplete{
+    margin-top: 10px;
+    display: none;
+}
+
+.uploadError{
     display: none;
 }

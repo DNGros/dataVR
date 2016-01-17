@@ -26,8 +26,53 @@
         </div>
         Start by just uploading a file
         <input type="file" id="upCSV" accept=".csv">
-        <div class="col-md-16 text-center"> 
-            <button type="button" id="VisualizeBtn" class="btn btn-success col-centered">Visualize!</button>
+        <div class = "uploadComplete panel panel-primary">
+            <div class="panel-heading">Upload Success!</div>
+            <div class="panel-body">
+                <h3>Options</h3>
+                <label for="chartSelect">What kind of chart?</label>
+                <ul id = "chartSelect" class="nav nav-pills">
+                    <li class="active"><a data-toggle="pill" href="#scatter">Scatter</a></li>
+                    <li><a data-toggle="pill" href="#pie">Pie</a></li>
+                    <li><a data-toggle="pill" href="#bar">Bar</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="scatter" class="tab-pane fade in active">
+                        
+                    </div>
+                    <div id="pie" class="tab-pane fade">
+
+                    </div>
+                    <div id="bar" class="tab-pane fade">
+
+                    </div>
+    
+                </div>
+                  
+                <!--<form role="graphOptions">
+                    <label for="chartSelect">What kind of chart?</label>
+                    <select name="chartSelect" id="chartSelect" class="form-control">
+                      <option value="scatter">Scatter</option>
+                      <option value="pie">Pie</option>
+                      <option value="bar">Bar</option>
+                    </select>
+</form>-->
+                    <div class="col-md-16 text-center"> 
+                        
+                        <button type="button" id="VisualizeBtn" class="btn btn-success col-centered">Visualize!</button>
+                    </div>
+                
+            </div>
+        </div>
+        
+        <div class = "uploadError panel panel-danger">
+            <div class="panel-heading">Something went wrong :/</div>
+            <div class="panel-body">
+                <h3>Error:</h3>
+                <p id = "errorOut"></p>
+                
+                <p>(also tip: be careful when exporting from excel. It seems to like to add an extra blank line at the end. Open the file in a text editor and delete extra line to fix)</p>
+            </div>
         </div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
