@@ -177,23 +177,13 @@
         
     }
     
-    var testScat = new ScatterGraph({xData:x, yData:y, zData:z, sData:s});
-    /*var bars = [];
-    for(var i = 0; i < data.x.length; i++){
-       var geometry = new THREE.BoxGeometry(0.5, data.y[i], 0.5);
-       var cube = new THREE.Mesh(geometry, material);
-       cube.position.z = -5;
-       cube.position.x = data.x[i] - 3;
-       bars.push(cube);
-       scene.add(cube);
-    }*/
+    //var testScat = new ScatterGraph({xData:x, yData:y, zData:z, sData:s});
+    
+    var scatterPlot = new ScatterGraph(x,y,z,s);
+    scene.add(scatterPlot);
     
     // Request animation frame loop function
     function animate(timestamp) {
-      // Apply rotation to bar meshes
-      /*for(var i = 0; i < bars.length; i++){
-        bars[i].rotation.y += 0.01;
-      }*/
 
       // Update VR headset position and apply to camera.
       controls.update();

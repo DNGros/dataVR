@@ -1,11 +1,11 @@
 {
-  "name": "webvr-boilerplate",
-  "version": "0.3.5",
-  "homepage": "https://github.com/borismus/webvr-boilerplate",
+  "name": "DataVR",
+  "version": "0.1",
+  "homepage": "",
   "authors": [
-    "Boris Smus <boris@smus.com>"
+    ""
   ],
-  "description": "A starting point for web-based VR experiences that work in both Cardboard and Oculus.",
+  "description": "Visualize data",
   "main": "build/webvr-manager.js",
   "keywords": [
     "vr",
