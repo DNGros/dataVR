@@ -162,12 +162,13 @@
     var currentPainting;
     var oldColor;
     function render() {
-        // update the picking ray with the camera and mouse position    
-        raycaster.setFromCamera( mouse, camera );       
+        // update the picking ray with the camera and mouse positioni
+	var center = new THREE.Vector2(0,0);
+        raycaster.setFromCamera( center, camera );       
 
         
 	
-// calculate objects intersecting the picking ray
+	// calculate objects intersecting the picking ray
         var intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length >0 && currentPainting !== intersects[0].object) {     
 	     if (currentPainting !== undefined) {
@@ -182,7 +183,7 @@
 	      currentPainting.material.color.set(oldColor);
 	     currentPainting = undefined;
 	}
-/* for ( var i = 0; i < intersects.length; i++ ) {
+	/* for ( var i = 0; i < intersects.length; i++ ) {
              intersects[ i ].object.material.color.set( 0xff0000 );
              console.log('touched obj');        
         }*/

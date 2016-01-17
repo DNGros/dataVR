@@ -101,6 +101,7 @@
     // Only enable it if you actually need to.
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
+    var raycaster = new THREE.Raycaster();
 
     // Append the canvas element created by the renderer to document body element.
     document.body.appendChild(renderer.domElement);
@@ -160,13 +161,37 @@
     console.log(x);
     var newChart = new ScatterGraph(x,y,z,s);
     scene.add(newChart);    
-    
+   
+    var currentPainting;
+    var oldColor; 
+    function checkGaze() {
+	var center = new THREE.Vector2(0,0);
+        raycaster.setFromCamera( center, camera );           
+        
+        // calculate objects intersecting the picking ray
+        var intersects = raycaster.intersectObjects( scene.children, true );
+        if (intersects.length >0 && currentPainting !== intersects[0].object) {     
+             if (currentPainting !== undefined) {
+                 console.log(oldColor); 
+                 currentPainting.material.color.set(oldColor);
+             }
+             currentPainting = intersects[0].object;
+             console.log('conditional entered');
+             oldColor = currentPainting.material.color.clone();  
+             currentPainting.material.color.set( 0xff0000 );
+        } else if (intersects.length === 0 && currentPainting !== undefined) {
+              currentPainting.material.color.set(oldColor);
+             currentPainting = undefined;
+        }
+	renderer.render(scene, camera);	
+    }
     
     // Request animation frame loop function
     function animate(timestamp) {
       // Update VR headset position and apply to camera.
       controls.update();
 
+      checkGaze();
       // Render the scene through the manager.
       manager.render(scene, camera, timestamp);
 

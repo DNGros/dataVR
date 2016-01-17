@@ -18,12 +18,13 @@ function ScatterGraph(xData, yData, zData, sData){
         alert("invalid data"); */ //different lengths
     
     
-    this.material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
+   // this.material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
     //add the stuff
     var pointSpheres = [];
     for(var i = 0; i < xData.length; i++){
+       var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
        var geometry = new THREE.SphereGeometry(sData[i],16,16);
-       var sphere = new THREE.Mesh(geometry, this.material);
+       var sphere = new THREE.Mesh(geometry, material);
        sphere.position.z = zData[i];
        sphere.position.x = xData[i];
        sphere.position.y = yData[i];
