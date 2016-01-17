@@ -94,7 +94,7 @@
 <script src="custom_src/barchart.js"></script>
 <script src="custom_src/ScatterGraph.js"></script>   
 <script src="custom_src/util.js"></script>  
-
+<script src="custom_src/piechart.js"></script>
     
 <script> 
     var cursorDistanceDefault = 2.0;
@@ -159,16 +159,34 @@
     var manager = new WebVRManager(renderer, effect, params);
 
     // Create 3D objects.
-    //var material = new THREE.MeshNormalMaterial();
-    var x,y,z,s;
-    x = JSON.parse(sessionStorage.xD);
-    y= JSON.parse(sessionStorage.yD);
-    z = JSON.parse(sessionStorage.zD);
-    s = JSON.parse(sessionStorage.sD);
-    console.log(x);
-    var newChart = new ScatterGraph(x,y,z,s);
-    scene.add(newChart);    
-   
+    var chartTypes = JSON.parse(sessionStorage.chartTypes);
+    
+    var newChart;
+    switch(chartTypes[0]){
+        case "scatter":
+            var x,y,z,s;
+            x = JSON.parse(sessionStorage.xD);
+            y= JSON.parse(sessionStorage.yD);
+            z = JSON.parse(sessionStorage.zD);
+            s = JSON.parse(sessionStorage.sD);
+            newChart = new ScatterGraph(x,y,z,s);
+            break;
+        case "pie":
+            var pieData = JSON.parse(sessionStorage.pieData);
+            var colors = [ 0x9966ff, 0xCC3300, 0x00ffff , 0x00CC33, 0xC36A41, 0x03B3F3, 0xA543B3];
+            var data = { 'meep1': 5, 'meep2': 5, 'meep3': 2 };
+            newChart = new PieChart(pieData, colors, 1, 8);
+            newChart.position.z = -7;
+            newChart.position.y = -1;
+            newChart.rotation.y = 70;
+            newChart.rotation.x = .2;
+            break;
+        case "bar":
+            break;
+            
+    }
+    scene.add(newChart);
+    
     var currentPainting;
     var oldColor; 
     function checkGaze() {

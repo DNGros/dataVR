@@ -5,17 +5,19 @@
 function PieChart(hist, colors, height, radius) {
   pie = new THREE.Object3D();
 
-  var totalCount = 0;
+  var totalCount = 0.0;
   for (var category in hist) {
-    totalCount += hist[category];
+      console.log("add count " + category + " val " + hist[category]);
+    totalCount += Number(hist[category]);
   }
+    console.log("tot count " + totalCount);
   var startDegree = 0;
 
   Object.keys(hist).forEach(function(category, index) {
-    var sliceSize = Math.PI * 2 * hist[category] / totalCount;
+    var sliceSize = Math.PI * 2 * Number(hist[category]) / totalCount;
     var sliceGeometry = new THREE.CylinderGeometry(radius, radius, height, 20, 
 	32, false, startDegree, sliceSize);
-    console.log(sliceGeometry.name);
+    //console.log(sliceGeometry.name);
     var sliceMaterial = new THREE.MeshLambertMaterial({ color: colors[index] });
     var slice = new THREE.Mesh(sliceGeometry, sliceMaterial);
     slice.position.y = -10;
@@ -24,6 +26,6 @@ function PieChart(hist, colors, height, radius) {
   }, hist);
 
   // put a stylish little tilt to our chart
-  pie.rotation.y = 0.3;
+  //pie.rotation.y = 0.3;
   return pie;
 }

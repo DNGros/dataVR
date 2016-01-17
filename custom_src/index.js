@@ -33,8 +33,10 @@ jQuery("#upCSV").change(function () {
 //Click listener for visualize button
 $('#VisualizeBtn').click(function(){
     console.log($("ul#chartSelect li.active a").attr('href'));
+    var chartTypes = [];
     switch($("ul#chartSelect li.active a").attr('href')){
         case "#scatter":
+            chartTypes.push("scatter");
             var xD = [], yD =[], zD =[], sD=[];
             parseResults.data.forEach(function(row, index){
                 xD.push(row.x);
@@ -48,9 +50,18 @@ $('#VisualizeBtn').click(function(){
             sessionStorage.zD = JSON.stringify(zD);
             sessionStorage.sD = JSON.stringify(sD);
             break;
+        case '#pie':
+            chartTypes.push("pie");
+            var pieData = {};
+            parseResults.data.forEach(function(row, index){
+                pieData[row.category]  = row.value;
+            });
+            //Store it for next page
+            sessionStorage.pieData = JSON.stringify(pieData);
+            break;
     }
-    
-    
+    //record of kinds of charts
+    sessionStorage.chartTypes = JSON.stringify(chartTypes);
     
     window.location.href = 'visualize.html';
 });
